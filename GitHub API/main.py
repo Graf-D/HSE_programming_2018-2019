@@ -3,7 +3,7 @@ from collections import defaultdict, Counter
 
 
 BASE_URL = 'https://api.github.com'
-TOKEN = 'd63177aa57f59b0834eb45d8e52f27303ab9d8d4'
+TOKEN = open('token.txt', 'r').read()
 
 
 '''
