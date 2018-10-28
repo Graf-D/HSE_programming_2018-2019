@@ -1,0 +1,16 @@
+BASE_URL = 'http://open-dubna.ru'
+TOPICS = {'Общество': '/obshchestvo/',
+          'Наука': '/nauka/',
+          'Культура': '/kultura/',
+          'Здоровье': '/zdorove/',
+          'Спорт': '/sport/',
+          'Транспорт': '/transport/',
+          'Безопасность': '/proisshestviya/',
+          'Мнения': '/mneniya/',
+          'Спецпроекты':'/specproject/',
+          'Новости бизнеса': '/partner/',
+          'Профессионал': '/professional/',
+          'ЖКХ': '/zhkkh/',
+          'Образование': '/obrazovanie/',
+          'Законы': '/zakony/',
+          'Экономика': '/ekonomika/'}
