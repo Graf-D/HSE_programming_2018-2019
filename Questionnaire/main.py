@@ -1,4 +1,4 @@
-from flask import Flask, render_template, request, redirect, jsonify
+from flask import Flask, render_template, request, redirect, jsonify, url_for
 from stats_gen import *
 from saver import *
 
@@ -54,23 +54,24 @@ def show_search_page():
 @app.route('/search', methods=['POST'])
 def search():
     search_data = {'words': request.form.get('wordstofind').split(),
-                   'minage': request.form.get('minage'),
-                   'maxage': request.form.get('maxage')}
+                   'minage': int(request.form.get('minage')),
+                   'maxage': int(request.form.get('maxage'))}
 
     try:
-        json_ = gen_json(must_contain=search_data['words'],
-                         min_age=search_data['minage'],
-                         max_age=search_data['maxage'])
+        search_results = gen_json(must_contain=search_data['words'],
+                                  min_age=search_data['minage'],
+                                  max_age=search_data['maxage'])
     except TypeError:
         return '''<p>Что-то пошло не так, попробуйте заново.</p>
                <p><a href="/search">На страницу поиска</a></p>'''
 
-    return redirect('/results')
+    return redirect(url_for('results', search_results=search_results))
 
 
 @app.route('/results')
 def results():
-    return render_template('results.html')
+    search_results = request.args['search_results']
+    return render_template('results.html', res=json.loads(search_results))
 
 
 if __name__ == '__main__':

@@ -23,7 +23,7 @@ def gen_json(csv_file=CSV_FILENAME, this_sep='\t',
         #  if there are all the words, proceed
         else:
             lang, age, apple, axe, horse = data[i].split(this_sep)
-            if min_age <= age <= max_age:
+            if min_age <= int(age) <= max_age:
                 curr_data = {'lang': lang,
                              'age': age,
                              'apple': apple,
