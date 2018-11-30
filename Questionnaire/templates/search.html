@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Поиск</title>
+</head>
+<body>
+
+<article>
+  <header>
+    <h1>Поиск</h1>
+    <p><a href="/">На главную</a></p>
+  </header>
+ <form action="/" method="POST" name="search">
+  <p><strong>Введите через пробел слова, которые должны быть в ответе респодента (можно оставить пустым)</strong></p>
+  <p><input type="text" id="wordstofind" name="wordstofind" pattern="\d{,200}"></p>
+  <p><strong>Минимальный возраст респондента:</strong></p>
+  <p><input type="number" id="minage" name="minage" pattern="[0-9]{1,3}" value="0" required></p>
+  <p><strong>Максимальный возраст респондента:</strong></p>
+  <p><input type="number" id="maxage" name="maxage" pattern="[0-9]{1,3}" value="150" required></p>
+  <p><input type="submit" value="Искать"></p>
+ </form>
+ </article>
+
+</body>
+</html>

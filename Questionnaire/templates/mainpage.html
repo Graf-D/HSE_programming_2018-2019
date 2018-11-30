@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>Лингвистическая анкета</title>
+</head>
+
+<body>
+<article>
+  <header>
+    <h1>Анкета</h1>
+    <p>Укажите ваш возраст и язык, которым вы владеете как родным.
+	После этого для каждой картинки напишите, как этот предмет называется в вашем языке.</p>
+  </header>
+  <form action="/" method="POST" name="ans">
+	<p><strong>Ваш язык</strong></p>
+	  <p><input type="text" id="language" name="language" pattern="\d{,100}" required></p>
+	  
+	  <p><strong>Ваш возраст</strong></p>
+	  <p><input type="number" id="age" name="age" pattern="\d{,100}" required></p>
+
+	  <p><img src="{{url_for('static', filename='apple.jpg')}}" height="250"/></p>
+	  <p><input type="text" id="apple" name="apple" pattern="\d{,100}" required></p>
+	  
+	  <p><img src="{{url_for('static', filename='axe.jpg')}}" height="250"/></p>
+	  <p><input type="text" id="axe" name="axe" pattern="\d{,100}" required></p>
+	  
+	  <p><img src="{{url_for('static', filename='horse.jpeg')}}" height="250"/></p>
+	  <p><input type="text" id="horse" name="horse" pattern="\d{,100}" required></p>
+	  
+	  <p><input type="submit" value="Отправить"></p>
+	</form>
+</article>
+</body>
+</html>
