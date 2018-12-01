@@ -12,6 +12,7 @@
 	<p><a href="/">На главную</a></p>
   </header>
   <p><ul>{% block content %}Средний возраст респодентов – {{ aver_age }} лет{% endblock %}</ul></p>
+  <p>{{ bar }}</p>
   <p>Количество респодентов для каждого языка:</p>
   <p><ul>
     {% for lang, amount in lang_usage.items() %}

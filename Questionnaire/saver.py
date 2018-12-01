@@ -4,7 +4,7 @@ from conf import *
 
 def save_to_csv(data={}):
     with open(CSV_FILENAME, 'a', encoding='utf-8') as f:
-        print()
+        print(file=f)
         print('\t'.join(data.values()), file=f, end='')
 
 
@@ -18,7 +18,7 @@ def gen_json(csv_file=CSV_FILENAME, this_sep='\t',
     for i in range(1, len(data)):
         #  (for search) checking that current row contains all necessary words
         for elem in must_contain:
-            if elem not in data[i]:
+            if elem.lower() not in data[i]:
                 break
         #  if there are all the words, proceed
         else:
