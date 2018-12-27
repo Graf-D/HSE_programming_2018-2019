@@ -6,19 +6,14 @@ app = Flask(__name__)
 
 
 @app.route('/', methods=['GET'])
-def show_page():
-    return render_template('search.html', res=[])
-
-
-@app.route('/', methods=['POST'])
 def search():
-    search_line = request.form.get('tofind')
+    search_line = request.args.get('tofind')
     if not search_line:
         return render_template('search.html', res=[])
 
     stemmed_request = stem_request(search_line)
     results = crop_results(search_by_stemmed(stemmed_request), stemmed_request)
-    return render_template('search.html', res=results)
+    return render_template('search.html', res=results, search_line=search_line)
 
 
 if __name__ == '__main__':

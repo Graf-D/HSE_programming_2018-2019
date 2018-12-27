@@ -10,16 +10,16 @@
   <header>
     <h1>Поиск</h1>
   </header>
- <form action="/" method="POST" name="search">
+ <form action="/" method="GET" name="search">
   <p><strong>Введите фразу, которую хотите искать</strong></p>
-  <p><input type="text" id="tofind" name="tofind" pattern="\d{,500}"></p>
+  <p><input type="text" id="tofind" name="tofind" value="{{search_line}}" maxlength="500"></p>
   <p><input type="submit" value="Искать"></p>
   {% if res == [] %}
 	<p></p>
 {% else %}
         {%for key, value in res.items()%}
-		<p>{{value}}</p>
-         <p> <a href="{{key}}">Читать полностью</a> </p>
+         <p> <a href="{{key}}">{{value[0]}}</a> </p>
+		 <p>{{value[1]}}</p>
 		 <br>
 		 <br>
         {% endfor %}

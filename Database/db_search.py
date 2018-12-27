@@ -24,7 +24,7 @@ def stem_request(request_text):
 def search_by_stemmed(stemmed):
     conn = sqlite3.connect('articles.db')
     c = conn.cursor()
-    c.execute('SELECT lemma, url FROM articles WHERE lemma LIKE (?)',
+    c.execute('SELECT header, lemma, url FROM articles WHERE lemma LIKE (?)',
               ('%' + stemmed + '%',))
     results = c.fetchall()
     conn.close()
@@ -34,6 +34,7 @@ def search_by_stemmed(stemmed):
 def crop_results(tuple_results, stemmed):
     dict_results = {}
     for result in tuple_results:
-        index = result[0].find(stemmed)
-        dict_results[result[1]] = result[0][index:index+300] + '...'
+        index = result[1].find(stemmed)
+        dict_results[result[2]] = [result[0],
+                                   result[1][index:index+300] + '...']
     return dict_results
