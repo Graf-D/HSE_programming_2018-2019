@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Поиск по корпусу текстов</title>
+</head>
+<body>
+
+<article>
+  <header>
+    <h1>Поиск</h1>
+  </header>
+ <form action="/" method="POST" name="search">
+  <p><strong>Введите фразу, которую хотите искать</strong></p>
+  <p><input type="text" id="tofind" name="tofind" pattern="\d{,500}"></p>
+  <p><input type="submit" value="Искать"></p>
+  {% if res == [] %}
+	<p></p>
+{% else %}
+        {%for key, value in res.items()%}
+		<p>{{value}}</p>
+         <p> <a href="{{key}}">Читать полностью</a> </p>
+		 <br>
+		 <br>
+        {% endfor %}
+
+{% endif %}
+ </form>
+ </article>
+
+</body>
+</html>
