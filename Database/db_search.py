@@ -1,5 +1,20 @@
 import sqlite3
 import os
+from threading import local
+
+
+PAGE_SIZE = 20
+LOCAL_STORAGE = local()
+
+
+def get_db(db_name='articles.db'):
+    if not hasattr(LOCAL_STORAGE, '_db'):
+        LOCAL_STORAGE._db = sqlite3.connect(db_name)
+    return LOCAL_STORAGE._db
+
+
+def close_db():
+    get_db().close()
 
 
 def stem_request(request_text):
@@ -21,13 +36,19 @@ def stem_request(request_text):
     return stemmed.strip('\n')
 
 
-def search_by_stemmed(stemmed):
-    conn = sqlite3.connect('articles.db')
-    c = conn.cursor()
-    c.execute('SELECT header, lemma, url FROM articles WHERE lemma LIKE (?)',
+def count_results(stemmed):
+    c = get_db().cursor()
+    c.execute('SELECT COUNT(*) FROM articles WHERE lemma LIKE (?)',
               ('%' + stemmed + '%',))
+    return c.fetchone()[0]
+
+
+def search_by_stemmed(stemmed, page):
+    c = get_db().cursor()
+    c.execute('SELECT header, lemma, url FROM articles WHERE lemma LIKE (?)'
+              ' LIMIT (?) OFFSET (?)',
+              ('%' + stemmed + '%', PAGE_SIZE, page * PAGE_SIZE))
     results = c.fetchall()
-    conn.close()
     return results
 
 
@@ -35,6 +56,10 @@ def crop_results(tuple_results, stemmed):
     dict_results = {}
     for result in tuple_results:
         index = result[1].find(stemmed)
+        if index >= 100:
+            start = index - 100
+        else:
+            start = index
         dict_results[result[2]] = [result[0],
-                                   result[1][index:index+300] + '...']
+                                   result[1][start:index+300] + '...']
     return dict_results
