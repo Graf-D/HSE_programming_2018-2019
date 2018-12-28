@@ -1,6 +1,6 @@
 import sqlite3
 import os
-from DBArticle import DBArticle
+from Article import Article
 
 
 conn = sqlite3.connect('articles.db')
@@ -28,8 +28,8 @@ for root, dirs, files in os.walk('plain'):
                 with open(path, 'r', encoding='utf-8') as f:
                     this_lemma = f.read()
 
-                articles.append(DBArticle(this_header, this_plain,
-                                          this_lemma, this_url))
+                articles.append(Article(this_header, this_plain,
+                                        this_lemma, this_url))
 
 
 for article in articles:

@@ -2,6 +2,9 @@ import sqlite3
 import os
 from threading import local
 
+from Article import Article
+from SearchResult import SearchResult
+
 
 PAGE_SIZE = 20
 LOCAL_STORAGE = local()
@@ -45,21 +48,19 @@ def count_results(stemmed):
 
 def search_by_stemmed(stemmed, page):
     c = get_db().cursor()
-    c.execute('SELECT header, lemma, url FROM articles WHERE lemma LIKE (?)'
-              ' LIMIT (?) OFFSET (?)',
+    # * doesn't guarantee an order of columns
+    # source: https://www.sqlite.org/lang_select.html
+    c.execute('SELECT header, plain, lemma, url FROM articles'
+              ' WHERE lemma LIME (?) LIMIT (?) OFFSET (?)',
               ('%' + stemmed + '%', PAGE_SIZE, page * PAGE_SIZE))
     results = c.fetchall()
-    return results
+
+    articles = []
+    for result in results:
+        articles.append(Article(*result))
+
+    return articles
 
 
-def crop_results(tuple_results, stemmed):
-    dict_results = {}
-    for result in tuple_results:
-        index = result[1].find(stemmed)
-        if index >= 100:
-            start = index - 100
-        else:
-            start = index
-        dict_results[result[2]] = [result[0],
-                                   result[1][start:index+300] + '...']
-    return dict_results
+def convert_results(articles, stemmed):
+    return [SearchResult(article, stemmed) for article in articles]

@@ -14,9 +14,9 @@
   <p><strong>Введите фразу, которую хотите найти</strong></p>
   <p><input type="text" id="tofind" name="tofind" value="{{search_line}}" maxlength="500"></p>
   <p><input type="submit" value="Искать"></p></form>
-     {%for key, value in res.items()%}
-         <p> <a href="{{key}}">{{value[0]}}</a> </p>
-		 <p>{{value[1]}}</p>
+     {%for elem in res %}
+         <p> <a href="{{elem.article.url}}">{{elem.article.header}}</a> </p>
+		 <p>{{elem.plain_summary}}</p>
 		 <br>
 		 <br>
      {% endfor %}

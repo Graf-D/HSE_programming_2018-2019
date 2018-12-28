@@ -1,4 +1,4 @@
-class DBArticle:
+class Article:
     def __init__(self, header='', plain='', lemma='', url=''):
         self.header = header
         self.plain = plain
