@@ -51,7 +51,7 @@ def search_by_stemmed(stemmed, page):
     # * doesn't guarantee an order of columns
     # source: https://www.sqlite.org/lang_select.html
     c.execute('SELECT header, plain, lemma, url FROM articles'
-              ' WHERE lemma LIME (?) LIMIT (?) OFFSET (?)',
+              ' WHERE lemma LIKE (?) LIMIT (?) OFFSET (?)',
               ('%' + stemmed + '%', PAGE_SIZE, page * PAGE_SIZE))
     results = c.fetchall()
 
