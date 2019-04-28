@@ -25,6 +25,6 @@ def search():
 
 if __name__ == '__main__':
     try:
-        app.run(debug=True, use_reloader=False)
+        app.run(debug=False)
     finally:
         close_db()
