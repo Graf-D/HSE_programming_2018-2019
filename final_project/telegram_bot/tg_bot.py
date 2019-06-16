@@ -15,7 +15,8 @@ chat_states = {}
 @bot.message_handler(commands=['start', 'help'])
 def send_welcome(message):
     bot.send_message(message.chat.id, conf.WELCOME_MESSAGE,
-                     parse_mode='Markdown')
+                     parse_mode='Markdown',
+                     reply_markup=telebot.types.ReplyKeyboardRemove())
 
 
 def send_anecdotes(chat_id):
@@ -54,7 +55,8 @@ def first_is_chosen(message):
         first_likes = chat_states[message.chat.id].last_anecs[0].likes
         second_likes = chat_states[message.chat.id].last_anecs[1].likes
     except KeyError:
-        bot.reply_to(message, 'Что-то пошло не так. Нажмите /play еще раз')
+        bot.reply_to(message, 'Что-то пошло не так. Нажмите /play еще раз',
+                     reply_markup=telebot.types.ReplyKeyboardRemove())
         return
     if first_likes >= second_likes:
         chat_states[message.chat.id].won += 1
@@ -65,7 +67,8 @@ def first_is_chosen(message):
         msg = (f'Не-а. Первый анек набрал {first_likes} лайков, '
                f'а второй – {second_likes}')
 
-    bot.send_message(message.chat.id, msg)
+    bot.send_message(message.chat.id, msg,
+                     reply_markup=telebot.types.ReplyKeyboardRemove())
     send_anecdotes(message.chat.id)
 
 
@@ -76,7 +79,8 @@ def second_is_chosen(message):
         first_likes = chat_states[message.chat.id].last_anecs[0].likes
         second_likes = chat_states[message.chat.id].last_anecs[1].likes
     except KeyError:
-        bot.reply_to(message, 'Что-то пошло не так. Нажмите /play еще раз')
+        bot.reply_to(message, 'Что-то пошло не так. Нажмите /play еще раз',
+                     reply_markup=telebot.types.ReplyKeyboardRemove())
         return None
     if second_likes >= first_likes:
         chat_states[message.chat.id].won += 1
@@ -87,29 +91,38 @@ def second_is_chosen(message):
         msg = (f'Не-а. Второй анек набрал {second_likes} лайков, '
                f'а первый – {first_likes}')
 
-    bot.send_message(message.chat.id, msg)
+    bot.send_message(message.chat.id, msg,
+                     reply_markup=telebot.types.ReplyKeyboardRemove())
     send_anecdotes(message.chat.id)
 
 
 @bot.message_handler(func=lambda x:
                      x.text == chr(0x1F612) + 'Что-то из этого вообще не анек')
 def not_anec(message):
-    bot.send_message(message.chat.id, 'Ок, вот другие посты!')
+    bot.send_message(message.chat.id, 'Ок, вот другие посты!',
+                     reply_markup=telebot.types.ReplyKeyboardRemove())
     send_anecdotes(message.chat.id)
 
 
 @bot.message_handler(commands=['stop'])
 def show_stats(message):
     chat_id = message.chat.id
+    if chat_id not in chat_states.keys():
+        bot.send_message(chat_id, 'Сначала надо начать игру, нажав /play',
+                         reply_markup=telebot.types.ReplyKeyboardRemove())
+        return
+
     if (chat_states[chat_id].won % 10 in range(0, 2) or
-        chat_states[chat_id].won % 10 in range(5, 10)):
+       chat_states[chat_id].won % 10 in range(5, 10)):
         word_form = 'раз'
     elif chat_states[chat_id].won % 10 in range(2, 5):
         word_form = 'раза'
     msg = (f'Ты угадал(а) {chat_states[chat_id].won} раз '
            f'и ошибся(лась) {chat_states[chat_id].lost}.')
-    bot.send_message(chat_id, msg)
-    bot.send_message(chat_id, 'Чтобы сыграть еще раз, нажми /play')
+    bot.send_message(chat_id, msg,
+                     reply_markup=telebot.types.ReplyKeyboardRemove())
+    bot.send_message(chat_id, 'Чтобы сыграть еще раз, нажми /play',
+                     reply_markup=telebot.types.ReplyKeyboardRemove())
 
 
 def main():
@@ -118,6 +131,7 @@ def main():
         bot.polling()
     finally:
         db.close()
+
 
 if __name__ == '__main__':
     main()
