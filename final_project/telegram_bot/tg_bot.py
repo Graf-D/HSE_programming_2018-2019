@@ -27,9 +27,9 @@ def send_anecdotes(chat_id):
         reply_text = '\n\n'.join([f'<b>АНЕКДОТ {i + 1}</b>', anec.text])
         bot.send_message(chat_id, reply_text, parse_mode='HTML')
 
-        keyboard = telebot.types.ReplyKeyboardMarkup(row_width=2,
-                                                     resize_keyboard=True,
-                                                     one_time_keyboard=True)
+    keyboard = telebot.types.ReplyKeyboardMarkup(row_width=2,
+                                                 resize_keyboard=True,
+                                                 one_time_keyboard=True)
     button_first = telebot.types.KeyboardButton(chr(0x261D) + 'Первый')
     button_second = telebot.types.KeyboardButton(chr(0x270C) + 'Второй')
     not_anec_msg = chr(0x1F612) + 'Что-то из этого вообще не анек'
