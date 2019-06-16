@@ -88,9 +88,6 @@ def first_is_chosen(message):
         msg = (f'Не-а. Первый анек набрал {first_likes} лайков, '
                f'а второй – {second_likes}')
 
-    bot.send_message(message.chat.id, msg,
-                     reply_markup=telebot.types.ReplyKeyboardRemove())
-
     keyboard = telebot.types.ReplyKeyboardMarkup(row_width=2,
                                                  resize_keyboard=True,
                                                  one_time_keyboard=True)
@@ -98,6 +95,7 @@ def first_is_chosen(message):
                                                    'Несите еще!')
     button_stop = telebot.types.KeyboardButton(chr(0x1F645) + 'Хватит')
     keyboard.add(button_continue, button_stop)
+    bot.send_message(message.chat.id, msg, reply_markup=keyboard)
 
 
 @bot.message_handler(func=lambda x: x.text == chr(0x270C) + 'Второй')
@@ -119,12 +117,14 @@ def second_is_chosen(message):
         msg = (f'Не-а. Второй анек набрал {second_likes} лайков, '
                f'а первый – {first_likes}')
 
-    bot.send_message(message.chat.id, msg,
-                     reply_markup=telebot.types.ReplyKeyboardRemove())
+    keyboard = telebot.types.ReplyKeyboardMarkup(row_width=2,
+                                                 resize_keyboard=True,
+                                                 one_time_keyboard=True)
     button_continue = telebot.types.KeyboardButton(chr(0x1F60E) +
                                                    'Несите еще!')
     button_stop = telebot.types.KeyboardButton(chr(0x1F645) + 'Хватит')
     keyboard.add(button_continue, button_stop)
+    bot.send_message(message.chat.id, msg, reply_markup=keyboard)
 
 
 @bot.message_handler(func=lambda x:
