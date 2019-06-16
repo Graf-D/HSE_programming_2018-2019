@@ -28,7 +28,8 @@ def send_anecdotes(chat_id):
         bot.send_message(chat_id, reply_text, parse_mode='HTML')
 
         keyboard = telebot.types.ReplyKeyboardMarkup(row_width=2,
-                                                     resize_keyboard=True)
+                                                     resize_keyboard=True,
+                                                     one_time_keyboard=True)
     button_first = telebot.types.KeyboardButton(chr(0x261D) + 'Первый')
     button_second = telebot.types.KeyboardButton(chr(0x270C) + 'Второй')
     not_anec_msg = chr(0x1F612) + 'Что-то из этого вообще не анек'
@@ -100,6 +101,11 @@ def not_anec(message):
 @bot.message_handler(commands=['stop'])
 def show_stats(message):
     chat_id = message.chat.id
+    if (chat_states[chat_id].won % 10 in range(0, 2) or
+        chat_states[chat_id].won % 10 in range(5, 10)):
+        word_form = 'раз'
+    elif chat_states[chat_id].won % 10 in range(2, 5):
+        word_form = 'раза'
     msg = (f'Ты угадал(а) {chat_states[chat_id].won} раз '
            f'и ошибся(лась) {chat_states[chat_id].lost}.')
     bot.send_message(chat_id, msg)
