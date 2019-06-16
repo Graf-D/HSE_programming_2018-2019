@@ -48,6 +48,27 @@ def start_play(message):
     send_anecdotes(message.chat.id)
 
 
+@bot.message_handler(commands=['stop'])
+def show_stats(message):
+    chat_id = message.chat.id
+    if chat_id not in chat_states.keys():
+        bot.send_message(chat_id, 'Сначала надо начать игру, нажав /play',
+                         reply_markup=telebot.types.ReplyKeyboardRemove())
+        return
+
+    if (chat_states[chat_id].won % 10 in range(0, 2) or
+       chat_states[chat_id].won % 10 in range(5, 10)):
+        word_form = 'раз'
+    elif chat_states[chat_id].won % 10 in range(2, 5):
+        word_form = 'раза'
+    msg = (f'Ты угадал(а) {chat_states[chat_id].won} раз '
+           f'и ошибся(лась) {chat_states[chat_id].lost}.')
+    bot.send_message(chat_id, msg,
+                     reply_markup=telebot.types.ReplyKeyboardRemove())
+    bot.send_message(chat_id, 'Чтобы сыграть еще раз, нажми /play',
+                     reply_markup=telebot.types.ReplyKeyboardRemove())
+
+
 @bot.message_handler(func=lambda x: x.text == chr(0x261D) + 'Первый')
 def first_is_chosen(message):
     global chat_states
@@ -69,7 +90,14 @@ def first_is_chosen(message):
 
     bot.send_message(message.chat.id, msg,
                      reply_markup=telebot.types.ReplyKeyboardRemove())
-    send_anecdotes(message.chat.id)
+
+    keyboard = telebot.types.ReplyKeyboardMarkup(row_width=2,
+                                                 resize_keyboard=True,
+                                                 one_time_keyboard=True)
+    button_continue = telebot.types.KeyboardButton(chr(0x1F60E) +
+                                                   'Несите еще!')
+    button_stop = telebot.types.KeyboardButton(chr(0x1F645) + 'Хватит')
+    keyboard.add(button_continue, button_stop)
 
 
 @bot.message_handler(func=lambda x: x.text == chr(0x270C) + 'Второй')
@@ -93,7 +121,10 @@ def second_is_chosen(message):
 
     bot.send_message(message.chat.id, msg,
                      reply_markup=telebot.types.ReplyKeyboardRemove())
-    send_anecdotes(message.chat.id)
+    button_continue = telebot.types.KeyboardButton(chr(0x1F60E) +
+                                                   'Несите еще!')
+    button_stop = telebot.types.KeyboardButton(chr(0x1F645) + 'Хватит')
+    keyboard.add(button_continue, button_stop)
 
 
 @bot.message_handler(func=lambda x:
@@ -104,25 +135,14 @@ def not_anec(message):
     send_anecdotes(message.chat.id)
 
 
-@bot.message_handler(commands=['stop'])
-def show_stats(message):
-    chat_id = message.chat.id
-    if chat_id not in chat_states.keys():
-        bot.send_message(chat_id, 'Сначала надо начать игру, нажав /play',
-                         reply_markup=telebot.types.ReplyKeyboardRemove())
-        return
+@bot.message_handler(func=lambda x: x.text == chr(0x1F60E) + 'Несите еще!')
+def more_anecs(message):
+    send_anecdotes(message.chat.id)
 
-    if (chat_states[chat_id].won % 10 in range(0, 2) or
-       chat_states[chat_id].won % 10 in range(5, 10)):
-        word_form = 'раз'
-    elif chat_states[chat_id].won % 10 in range(2, 5):
-        word_form = 'раза'
-    msg = (f'Ты угадал(а) {chat_states[chat_id].won} раз '
-           f'и ошибся(лась) {chat_states[chat_id].lost}.')
-    bot.send_message(chat_id, msg,
-                     reply_markup=telebot.types.ReplyKeyboardRemove())
-    bot.send_message(chat_id, 'Чтобы сыграть еще раз, нажми /play',
-                     reply_markup=telebot.types.ReplyKeyboardRemove())
+
+@bot.message_handler(func=lambda x: x.text == chr(0x1F645) + 'Хватит')
+def enough(message):
+    show_stats(message)
 
 
 def main():
