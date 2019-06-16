@@ -1,4 +1,5 @@
 *.txt
 *.db
+telegram_bot\conf.py
 __pycache__
 .ipynb_checkpoints
