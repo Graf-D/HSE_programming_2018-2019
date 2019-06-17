@@ -56,12 +56,11 @@ def show_stats(message):
                          reply_markup=telebot.types.ReplyKeyboardRemove())
         return
 
-    if (chat_states[chat_id].won % 10 in range(0, 2) or
-       chat_states[chat_id].won % 10 in range(5, 10)):
-        word_form = 'раз'
-    elif chat_states[chat_id].won % 10 in range(2, 5):
+    if chat_states[chat_id].won % 10 in range(2, 5):
         word_form = 'раза'
-    msg = (f'Ты угадал(а) {chat_states[chat_id].won} раз '
+    else:
+        word_form = 'раз'
+    msg = (f'Ты угадал(а) {chat_states[chat_id].won} {word_form} '
            f'и ошибся(лась) {chat_states[chat_id].lost}.')
     bot.send_message(chat_id, msg,
                      reply_markup=telebot.types.ReplyKeyboardRemove())
