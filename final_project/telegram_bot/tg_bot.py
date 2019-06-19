@@ -25,8 +25,8 @@ def send_anecdotes(chat_id):
     try:
         chat_states[chat_id].last_anecs = anecs
     except KeyError:
-        bot.reply_to(message, 'Что-то пошло не так. Нажмите /play еще раз',
-                     reply_markup=telebot.types.ReplyKeyboardRemove())
+        bot.send_message(chat_id, 'Что-то пошло не так. Нажмите /play еще раз',
+                         reply_markup=telebot.types.ReplyKeyboardRemove())
 
     for i, anec in enumerate(anecs):
         reply_text = '\n\n'.join([f'<b>АНЕКДОТ {i + 1}</b>', anec.text])
